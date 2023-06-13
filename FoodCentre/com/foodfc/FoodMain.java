@@ -1,5 +1,6 @@
 package com.foodfc;
 import java.util.*;
+import java.sql.*;
 import java.lang.*;
 import java.text.NumberFormat;
 class myErrHandle extends RuntimeException{
@@ -9,6 +10,7 @@ class myErrHandle extends RuntimeException{
 	}
 }
 public class FoodMain {
+	 
 
 	public static void main(String[] args) {
 		
@@ -20,23 +22,59 @@ public class FoodMain {
 		double total=0.0;
 		double price=0.0;
 		double cost=0;
+		
+	 
+		// Fetch the menu values from data base table 
 		ArrayList<FoodItem> f1 = new ArrayList<FoodItem>();
+		
+		String dbdriver = "com.mysql.cj.jdbc.Driver";
+		String url = "jdbc:mysql://localhost:3306/Person";
+		String root="root";
+		String pwd = "150030441@klU";
+		try {
+		Class.forName(dbdriver);
+		Connection con1 = DriverManager.getConnection(url,root,pwd);
+		
+		Statement st1 = con1.createStatement();
+		
+		ResultSet rs = st1.executeQuery("select *from FoodItem");
+		
+		while(rs.next()) {
+		 
+		f1.add(new FoodItem(rs.getString(1), rs.getDouble(2), rs.getBoolean(3)));
+
+		
+		 
+		}
+		
+		con1.close();
+		}catch (Exception e) {
+			System.out.println(e.getStackTrace());
+		}
+		//System.out.println("Data printed in Array list\n");
+		
+		
+
+//		f1.add(new FoodItem("Dosa",30.0,true));
+//		f1.add(new FoodItem("Bonda",20.0,true));
+//		f1.add(new FoodItem("Idly",10.0,true));
+//		f1.add(new FoodItem("EggDosa",45.0,true));
+//		f1.add(new FoodItem("Poori",20.0,true));
+//		f1.add(new FoodItem("Chapati",25.0,true));
+//		f1.add(new FoodItem("Pulka",15.0,true));
+//		f1.add(new FoodItem("Vada",15.0,true));
+		
 		System.out.println("\n--------------------Vishnu Food Centre Menu -----------------------\n");
 		System.out.println("\tItem   		Price  		 Available ");
-		f1.add(new FoodItem("Dosa",30.0,true));
-		f1.add(new FoodItem("Bonda",20.0,true));
-		f1.add(new FoodItem("Idly",10.0,true));
-		f1.add(new FoodItem("EggDosa",45.0,true));
-		f1.add(new FoodItem("Poori",20.0,true));
-		f1.add(new FoodItem("Chapati",25.0,true));
-		f1.add(new FoodItem("Pulka",15.0,true));
-		f1.add(new FoodItem("Vada",15.0,true));
+		
 		
 		ArrayList<FoodItem> f2 = new ArrayList<FoodItem>();
 		for(FoodItem i : f1) {
 			
 			i.displayMenu();
 		}
+		
+		 
 		
 		System.out.println("\t---------------------------------------------");
 		Scanner sc = new Scanner(System.in);
